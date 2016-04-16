@@ -1,5 +1,10 @@
 #pragma once
 
+#include "iostream"
+#include <stdio.h>
+#include <tchar.h>
+#include "stringconvert.h"
+
 namespace Project5Test {
 
 	using namespace System;
@@ -9,9 +14,11 @@ namespace Project5Test {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for MyForm
-	/// </summary>
+	int* Points = new int[100]; 
+	int i = 0;
+	int x = 1;
+	int y = 1;
+
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
@@ -87,12 +94,14 @@ namespace Project5Test {
 			// 
 			// pictureBox1
 			// 
+			this->pictureBox1->BackColor = System::Drawing::Color::Transparent;
 			this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->pictureBox1->Location = System::Drawing::Point(12, 12);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(560, 439);
 			this->pictureBox1->TabIndex = 2;
 			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::pictureBox1_Paint);
 			this->pictureBox1->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::pictureBox1_MouseClick);
 			// 
 			// MyForm
@@ -115,19 +124,37 @@ namespace Project5Test {
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+				delete [] Points;
 				Close();
 			 }
 	private: System::Void pictureBox1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-				int x = e->X;
-				int y = e->Y;
+				x = e->X;
+				y = e->Y;
+				string pointName;
+				string address;
+
+				pointName = "A" + toString(i) + " ";
+				address = toString(&Points[i]);
 
 				dataGridView1->RowCount += 1;
-
+				
+				dataGridView1[0, dataGridView1->RowCount - 1]->Value = gcnew System::String(pointName.c_str());
 				dataGridView1[1, dataGridView1->RowCount - 1]->Value = x;
 				dataGridView1[2, dataGridView1->RowCount - 1]->Value = y;
+				dataGridView1[3, dataGridView1->RowCount - 1]->Value = gcnew System::String(address.c_str());
+
+				// Drawing:
+				//Graphics^ g = CreateGraphics();
+				//g->FillRectangle(Brushes::Black, x, y, 1, 1);
+				
+				//pictureBox1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::pictureBox1_Paint);
+
+				pictureBox1->Refresh();
+
+				i += 1;
 			 }
 	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {
-				 dataGridView1->ColumnCount = 4;
+				dataGridView1->ColumnCount = 4;
 				dataGridView1->RowCount = 0;
 
 				DataGridViewColumn^ column0 = dataGridView1->Columns[0];
@@ -143,5 +170,10 @@ namespace Project5Test {
 				column3->Width = 90;
 				column3->HeaderText = "Адрес";
 			 }
+private: System::Void pictureBox1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+			 Graphics^ g = e->Graphics;
+			 g->FillRectangle(Brushes::Black, x - 1, y - 1, 4, 4);
+			 g->DrawString(gcnew System::String(("A" + toString(i)).c_str()), gcnew System::Drawing::Font("Arial", 11), System::Drawing::Brushes::Blue, Point(x, y));
+		 }
 };
 }
