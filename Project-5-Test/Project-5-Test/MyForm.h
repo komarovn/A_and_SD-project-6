@@ -3,7 +3,7 @@
 #include "iostream"
 #include <stdio.h>
 #include <tchar.h>
-#include "stringconvert.h"
+#include "PointClass.h"
 
 namespace Project5Test {
 

@@ -81,9 +81,11 @@
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseClass.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PointClass.h" />
     <ClInclude Include="stringconvert.h" />
   </ItemGroup>
   <ItemGroup>
